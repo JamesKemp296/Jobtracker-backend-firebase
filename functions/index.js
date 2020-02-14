@@ -3,12 +3,20 @@ const app = require('express')()
 
 const FBAuth = require('./util/fbauth')
 const { getAllJobs, postOneJob } = require('./handlers/jobs')
-const { getAllUsers, signup, login } = require('./handlers/users')
+const {
+  getAllUsers,
+  signup,
+  login,
+  addUserDetails,
+  uploadImage
+} = require('./handlers/users')
 
 // User routes
 app.get('/users', getAllUsers)
 app.post('/signup', signup)
 app.post('/login', login)
+app.post('/user', FBAuth, addUserDetails)
+// app.post('/user/image', FBAuth, uploadImage)
 
 // Job Routes
 app.get('/jobs', getAllJobs)

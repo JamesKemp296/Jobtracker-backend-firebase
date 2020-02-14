@@ -38,3 +38,26 @@ exports.validateLoginData = data => {
     valid: Object.keys(errors).length === 0 ? true : false
   }
 }
+
+exports.reduceUserDetails = data => {
+  let userDetails = {}
+
+  if (!isEmpty(data.linkedIn.trim())) {
+    if (data.linkedIn.trim().substring(0, 4) !== 'http') {
+      userDetails.linkedIn = `http://${data.linkedIn.trim()}`
+    } else userDetails.linkedIn = data.linkedIn
+  }
+  if (!isEmpty(data.github.trim())) {
+    if (data.github.trim().substring(0, 4) !== 'http') {
+      userDetails.github = `http://${data.github.trim()}`
+    } else userDetails.github = data.github
+  }
+  if (!isEmpty(data.website.trim())) {
+    if (data.website.trim().substring(0, 4) !== 'http') {
+      userDetails.website = `http://${data.website.trim()}`
+    } else userDetails.website = data.website
+  }
+  if (!isEmpty(data.location.trim())) userDetails.location = data.location
+
+  return userDetails
+}

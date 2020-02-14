@@ -38,6 +38,11 @@ exports.postOneJob = (req, res) => {
       })
     })
     .catch(err => {
+      if (err.code === 'auth/argument-error') {
+        res.status(500).json({ error: 'Invalid token' })
+        console.error(err)
+      }
+      // need to catch error for bad tokens
       res.status(500).json({ error: 'Something went wrong' })
       console.error(err)
     })
