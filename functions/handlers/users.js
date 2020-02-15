@@ -123,12 +123,9 @@ exports.uploadImage = (req, res) => {
   const path = require('path')
   const os = require('os')
   const fs = require('fs')
-
   const busboy = new BusBoy({ headers: req.headers })
-
   let imageToBeUploaded = {}
   let imageFileName
-
   busboy.on('file', (fieldname, file, filename, encoding, mimetype) => {
     console.log(fieldname, file, filename, encoding, mimetype)
     if (mimetype !== 'image/jpeg' && mimetype !== 'image/png') {
