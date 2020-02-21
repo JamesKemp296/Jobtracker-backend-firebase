@@ -94,11 +94,9 @@ exports.login = (req, res) => {
     })
     .catch(err => {
       console.error(err)
-      if (err.code === 'auth/wrong-password') {
-        return res
-          .status(403)
-          .json({ general: 'Wrong credentials, please try again' })
-      } else return res.status(500).json({ error: error.code })
+      return res
+        .status(403)
+        .json({ general: 'Wrong credentials, please try again' })
     })
 }
 
@@ -166,4 +164,117 @@ exports.uploadImage = (req, res) => {
       })
   })
   busboy.end(req.rawBody)
+}
+
+// Get any user's details
+exports.getUserDetails = (req, res) => {
+  let userData = {}
+  db.doc(`/users/${req.params.userId}`)
+    .get()
+    .then(doc => {
+      if (doc.exists) {
+        userData.user = doc.data()
+        return db
+          .collection('jobs')
+          .where('userId', '==', req.params.userId)
+          .orderBy('createdAt', 'desc')
+          .get()
+      } else {
+        return res.status(404).json({ errror: 'User not found' })
+      }
+    })
+    .then(data => {
+      userData.jobs = []
+      data.forEach(doc => {
+        userData.jobs.push({
+          userId: doc.data().userId,
+          company: doc.data().company,
+          position: doc.data().position,
+          status: doc.data().status,
+          link: doc.data().link,
+          createdAt: doc.data().createdAt,
+          jobId: doc.id
+        })
+      })
+      return res.json(userData)
+    })
+    .catch(err => {
+      console.error(err)
+      return res.status(500).json({ error: err.code })
+    })
+}
+
+// Get any user's details
+exports.getUserDetails = (req, res) => {
+  let userData = {}
+  db.doc(`/users/${req.params.userId}`)
+    .get()
+    .then(doc => {
+      if (doc.exists) {
+        userData.user = doc.data()
+        return db
+          .collection('jobs')
+          .where('userId', '==', req.params.userId)
+          .orderBy('createdAt', 'desc')
+          .get()
+      } else {
+        return res.status(404).json({ errror: 'User not found' })
+      }
+    })
+    .then(data => {
+      userData.jobs = []
+      data.forEach(doc => {
+        userData.jobs.push({
+          userId: doc.data().userId,
+          company: doc.data().company,
+          position: doc.data().position,
+          status: doc.data().status,
+          link: doc.data().link,
+          createdAt: doc.data().createdAt,
+          jobId: doc.id
+        })
+      })
+      return res.json(userData)
+    })
+    .catch(err => {
+      console.error(err)
+      return res.status(500).json({ error: err.code })
+    })
+}
+
+exports.getAuthenticatedUser = (req, res) => {
+  let userData = {}
+  db.doc(`users/${req.user.uid}`)
+    .get()
+    .then(doc => {
+      if (doc.exists) {
+        userData.user = doc.data()
+        return db
+          .collection('jobs')
+          .where('userId', '==', req.user.uid)
+          .orderBy('createdAt', 'desc')
+          .get()
+      } else {
+        return res.status(404).json({ errror: 'User not found' })
+      }
+    })
+    .then(data => {
+      userData.jobs = []
+      data.forEach(doc => {
+        userData.jobs.push({
+          userId: doc.data().userId,
+          company: doc.data().company,
+          position: doc.data().position,
+          status: doc.data().status,
+          link: doc.data().link,
+          createdAt: doc.data().createdAt,
+          jobId: doc.id
+        })
+      })
+      return res.json(userData)
+    })
+    .catch(err => {
+      console.error(err)
+      return res.status(500).json({ error: err.code })
+    })
 }

@@ -11,7 +11,9 @@ const {
   signup,
   login,
   addUserDetails,
-  uploadImage
+  uploadImage,
+  getUserDetails,
+  getAuthenticatedUser
 } = require('./handlers/users')
 
 // User routes
@@ -20,6 +22,8 @@ app.post('/signup', signup)
 app.post('/login', login)
 app.post('/user', FBAuth, addUserDetails)
 app.post('/user/image', FBAuth, uploadImage)
+app.get('/user/:userId', getUserDetails)
+app.get('/user', FBAuth, getUserDetails)
 
 // Job Routes
 app.get('/jobs', getAllJobs)
