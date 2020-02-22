@@ -26,13 +26,17 @@ exports.validateSignUpData = data => {
     errors.cohort = 'Not a valid cohort'
   }
   if (isEmpty(data.program)) errors.program = 'Must not be empty'
-  if (
-    (data.program !== 'full stack' && data.program.length) ||
-    (data.program !== 'uxui' && data.program.length)
-  ) {
+  // if (
+  //   (data.program !== 'full stack' && data.program.length) ||
+  //   (data.program !== 'uxui' && data.program.length)
+  // ) {
+  //   console.log(data.program)
+  //   errors.program = 'Not a valid program'
+  // }
+  if (!(data.program === 'full stack' || data.program === 'ux/ui')) {
     errors.program = 'Not a valid program'
   }
-
+  // if (data.program !== 'ux/ui') errors.program = 'Not a valid program'
   return {
     errors,
     valid: Object.keys(errors).length === 0 ? true : false
