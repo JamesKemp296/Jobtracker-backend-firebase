@@ -21,6 +21,17 @@ exports.validateSignUpData = data => {
   if (isEmpty(data.password)) errors.password = 'Must not be empty'
   if (data.password !== data.confirmPassword)
     errors.confirmPassword = 'Passwords must match'
+  if (isEmpty(data.cohort)) errors.cohort = 'Must not be empty'
+  if (Number(data.cohort) > 100 || Number(data.cohort) < 0) {
+    errors.cohort = 'Not a valid cohort'
+  }
+  if (isEmpty(data.program)) errors.program = 'Must not be empty'
+  if (
+    (data.program !== 'full stack' && data.program.length) ||
+    (data.program !== 'uxui' && data.program.length)
+  ) {
+    errors.program = 'Not a valid program'
+  }
 
   return {
     errors,

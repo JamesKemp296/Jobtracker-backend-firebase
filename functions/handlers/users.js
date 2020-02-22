@@ -27,7 +27,9 @@ exports.signup = (req, res) => {
   const newUser = {
     email: req.body.email,
     password: req.body.password,
-    confirmPassword: req.body.confirmPassword
+    confirmPassword: req.body.confirmPassword,
+    cohort: req.body.cohort,
+    program: req.body.program
   }
 
   // Validate user data
@@ -35,17 +37,9 @@ exports.signup = (req, res) => {
   if (!valid) return res.status(400).json(errors)
   const noImg = 'no-img.png'
   let token, userId
-  db.doc(`/users/${newUser.email}`)
-    .get()
-    .then(doc => {
-      if (doc.exists) {
-        return res.status(400).json({ email: 'Email already in use' })
-      } else {
-        return firebase
-          .auth()
-          .createUserWithEmailAndPassword(newUser.email, newUser.password)
-      }
-    })
+  firebase
+    .auth()
+    .createUserWithEmailAndPassword(newUser.email, newUser.password)
     .then(data => {
       userId = data.user.uid
       return data.user.getIdToken()
@@ -56,6 +50,8 @@ exports.signup = (req, res) => {
         email: newUser.email,
         createdAt: new Date().toISOString(),
         imageUrl: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${noImg}?alt=media`,
+        cohort: Number(newUser.cohort),
+        program: newUser.program,
         userId
       }
       return db.doc(`/users/${userId}`).set(userCredentials)
