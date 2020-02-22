@@ -25,6 +25,8 @@ exports.getAllUsers = (req, res) => {
 
 exports.signup = (req, res) => {
   const newUser = {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
     email: req.body.email,
     password: req.body.password,
     confirmPassword: req.body.confirmPassword,
@@ -47,6 +49,8 @@ exports.signup = (req, res) => {
     .then(idToken => {
       token = idToken
       const userCredentials = {
+        firstName: newUser.firstName,
+        lastName: newUser.lastName,
         email: newUser.email,
         createdAt: new Date().toISOString(),
         imageUrl: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${noImg}?alt=media`,
